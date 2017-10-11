@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_ingredient_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:tint="@color/colorAccent"
+        android:src="@drawable/ic_shopping_cart_black_24dp"/>
+
+    <TextView
+        android:id="@+id/tv_ingredient_description"
+        android:layout_width="0dp"
+        android:layout_height="72dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:alpha="1"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_ingredient_icon"
+        tools:text="Mascapone Cheese (Room Temperature)"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_ingredient_quantity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_ingredient_description"
+        app:layout_constraintEnd_toStartOf="@id/tv_ingredient_description"
+        app:layout_constraintBottom_toBottomOf="@id/tv_ingredient_description">
+        <TextView
+            android:id="@+id/tv_ingredient_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/colorAccent"
+            android:maxLines="1"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="500"/>
+
+        <TextView
+            android:id="@+id/tv_ingredient_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:alpha="0.5"
+            android:maxLines="1"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/tv_ingredient_quantity"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="grams"/>
+    </android.support.constraint.ConstraintLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:alpha="0.1"
+        app:layout_constraintTop_toBottomOf="@id/tv_ingredient_description"
+        app:layout_constraintStart_toStartOf="@id/tv_ingredient_description"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>
