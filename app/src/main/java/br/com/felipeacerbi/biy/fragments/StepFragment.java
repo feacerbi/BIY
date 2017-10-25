@@ -1,61 +1,48 @@
 package br.com.felipeacerbi.biy.fragments;
 
-import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.adapters.IChangeStepListener;
-import br.com.felipeacerbi.biy.adapters.IRecipeClickListener;
-import br.com.felipeacerbi.biy.adapters.RecipesAdapter;
-import br.com.felipeacerbi.biy.models.Recipe;
-import br.com.felipeacerbi.biy.models.RecipesArrayList;
+import br.com.felipeacerbi.biy.media.MediaPlayer;
 import br.com.felipeacerbi.biy.models.Step;
-import br.com.felipeacerbi.biy.repository.DataManager;
 import br.com.felipeacerbi.biy.utils.Constants;
-import br.com.felipeacerbi.biy.utils.RequestCallback;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 import icepick.Icepick;
 import icepick.State;
 
 public class StepFragment extends Fragment {
 
-    @BindView(R.id.tv_step_id)
     TextView tvStepId;
-    @BindView(R.id.tv_step_short_description)
     TextView tvShortDescription;
+
     @BindView(R.id.iv_step_photo)
     ImageView ivPhoto;
+    @BindView(R.id.sepv_step_video_player)
+    SimpleExoPlayerView sepvPlayerView;
     @BindView(R.id.tv_step_description)
     TextView tvDescription;
 
-    FloatingActionButton fabPrevious;
-    FloatingActionButton fabIngredients;
-    FloatingActionButton fabNext;
-
     @State(Step.class) Step mStep;
-    private IChangeStepListener mListener;
+    private MediaPlayer mPlayer;
+//    private IChangeStepListener mListener;
+
 
     public StepFragment() {
         // Required empty public constructor
@@ -84,87 +71,102 @@ public class StepFragment extends Fragment {
             mStep = Parcels.unwrap(arguments.getParcelable(Constants.STEP_EXTRA));
         }
 
-        setUpUI(view);
+        setUpCommonUI(view);
+
+        if(ButterKnife.findById(view, R.id.tv_step_id) != null) {
+            setUpMobileUI(view);
+        }
     }
 
-    private void setUpUI(View view) {
-        ButterKnife.bind(this, view);
+    private void setUpMobileUI(View view) {
+        tvStepId = ButterKnife.findById(view, R.id.tv_step_id);
+        tvShortDescription = ButterKnife.findById(view, R.id.tv_step_short_description);
 
         tvStepId.setText(String.valueOf(mStep.getId() + 1));
         tvShortDescription.setText(mStep.getShortDescription());
+    }
 
-        String description = mStep.getDescription();
-        tvDescription.setText((description.charAt(1) == '.') ? description.substring(3) : description);
+    private void setUpCommonUI(View view) {
+        ButterKnife.bind(this, view);
 
-//        if(mStep.getThumbnailURL().isEmpty()) {
-//            ivPhoto.setVisibility(View.GONE);
-//        } else {
+        tvDescription.setText(formatText(mStep.getDescription()));
+
+        if(!mStep.getVideoURL().isEmpty()) {
+            sepvPlayerView.setVisibility(View.VISIBLE);
+            ivPhoto.setVisibility(View.INVISIBLE);
+
+            mPlayer = new MediaPlayer(getContext(), sepvPlayerView, Uri.parse(mStep.getVideoURL()), getLifecycle());
+
+            if(getResources().getConfiguration().orientation == Constants.ORIENTATION_LANDSCAPE) {
+
+                ConstraintLayout layout = ButterKnife.findById(view, R.id.cl_layout_no_video);
+                if(layout != null) layout.setVisibility(View.INVISIBLE);
+
+            }
+
+        } else if(!mStep.getThumbnailURL().isEmpty()) {
             ivPhoto.setVisibility(View.VISIBLE);
 
             Picasso.with(getActivity())
-                    .load("error")//mStep.getThumbnailURL())
+                    .load(mStep.getThumbnailURL())
                     .fit()
                     .centerCrop()
                     .placeholder(R.drawable.recipe_placeholder)
                     .error(R.drawable.recipe_placeholder)
                     .into(ivPhoto);
-//        }
-
-        fabIngredients = ButterKnife.findById(getActivity(), R.id.fab_ingredients);
-        fabIngredients.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.openIngredients();
+        } else {
+            FrameLayout mediaLayout = ButterKnife.findById(view, R.id.fl_media_container);
+            if(mediaLayout != null) {
+                mediaLayout.setVisibility(View.GONE);
             }
-        });
+        }
+    }
 
-        fabNext = ButterKnife.findById(getActivity(), R.id.fab_next);
-        fabNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.goToNextStep();
-            }
-        });
+    private String formatText(String textToFormat) {
+        textToFormat = textToFormat.trim();
 
-        fabPrevious = ButterKnife.findById(getActivity(), R.id.fab_previous);
-        fabPrevious.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.goToPreviousStep();
-            }
-        });
+        if(textToFormat.charAt(textToFormat.length() - 1) != '.') {
+            textToFormat += ".";
+        }
 
+        if(textToFormat.charAt(1) == '.') {
+            textToFormat = textToFormat.substring(3);
+        }
+
+        if(textToFormat.charAt(2) == '.') {
+            textToFormat = textToFormat.substring(4);
+        }
+
+        return textToFormat;
     }
 
     @Override
     public Context getContext() {
-        return getSupportActivity();
+        return getActivity();
     }
 
-    private AppCompatActivity getSupportActivity() {
-        return (AppCompatActivity) getActivity();
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        if (context instanceof IChangeStepListener) {
+//            mListener = (IChangeStepListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString()
+//                    + " must implement IRecipeClickListener");
+//        }
+//    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof IChangeStepListener) {
-            mListener = (IChangeStepListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement IRecipeClickListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//        mListener = null;
+//    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
+
+
 }

@@ -1,4 +1,4 @@
-package br.com.felipeacerbi.biy.adapters;
+package br.com.felipeacerbi.biy.adapters.listeners;
 
 import android.content.Context;
 

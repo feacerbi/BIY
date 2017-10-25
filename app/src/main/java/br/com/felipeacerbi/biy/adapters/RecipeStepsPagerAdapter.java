@@ -3,7 +3,7 @@ package br.com.felipeacerbi.biy.adapters;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import org.parceler.Parcels;
 
@@ -13,7 +13,7 @@ import br.com.felipeacerbi.biy.fragments.StepFragment;
 import br.com.felipeacerbi.biy.models.Step;
 import br.com.felipeacerbi.biy.utils.Constants;
 
-public class RecipeStepsPagerAdapter extends FragmentPagerAdapter {
+public class RecipeStepsPagerAdapter extends FragmentStatePagerAdapter {
 
     private List<Step> mSteps;
 

@@ -1,11 +1,13 @@
 package br.com.felipeacerbi.biy.models;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import org.parceler.Parcel;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import icepick.Bundler;
 
@@ -13,6 +15,10 @@ import icepick.Bundler;
 public class RecipesArrayList extends ArrayList<Recipe> implements Bundler<ArrayList<Recipe>> {
 
     public RecipesArrayList() {
+    }
+
+    public RecipesArrayList(@NonNull Collection<? extends Recipe> c) {
+        super(c);
     }
 
     @Override

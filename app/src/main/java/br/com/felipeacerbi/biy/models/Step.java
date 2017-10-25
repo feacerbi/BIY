@@ -56,6 +56,10 @@ public class Step implements Bundler<Step> {
 		return thumbnailURL;
 	}
 
+	public boolean hasVideo() {
+		return !getVideoURL().isEmpty();
+	}
+
 	@Override
  	public String toString(){
 		return 

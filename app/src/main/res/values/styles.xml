@@ -22,4 +22,14 @@
         <item name="android:background">@color/colorPrimary</item>
     </style>
 
+    <style name="ExoMediaButton.Replay" parent="ExoMediaButton">
+        <item name="android:src">@drawable/exo_controls_repeat_all</item>
+        <item name="android:contentDescription">@string/exo_controls_repeat_all_description</item>
+    </style>
+
+    <style name="ExoMediaButton.Rewind5" parent="ExoMediaButton.Rewind">
+        <item name="android:src">@drawable/ic_replay_5_white_32dp</item>
+        <item name="android:contentDescription">@string/exo_controls_rewind_description</item>
+    </style>
+
 </resources>

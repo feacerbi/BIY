@@ -32,7 +32,6 @@
             android:id="@+id/tv_recipe_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:layout_marginStart="16dp"
             android:textSize="22sp"
             android:textColor="@android:color/black"
@@ -58,7 +57,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:gravity="center_vertical"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textColor="@android:color/black"
             android:alpha="0.5"
             card_view:layout_constraintTop_toTopOf="@id/iv_ingredient_icon"
@@ -76,7 +75,7 @@
             android:contentDescription="@string/ingredients_icon_description"
             card_view:layout_constraintTop_toBottomOf="@id/tv_ingredients"
             card_view:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/ic_restaurant_menu_black_24dp"/>
+            android:src="@drawable/ic_restaurant_black_24dp"/>
 
         <TextView
             android:id="@+id/tv_servings"
@@ -84,7 +83,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:gravity="center_vertical"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textColor="@android:color/black"
             android:alpha="0.5"
             card_view:layout_constraintTop_toTopOf="@id/iv_servings_icon"
@@ -123,7 +122,7 @@
             card_view:layout_constraintTop_toBottomOf="@id/iv_photo"
             card_view:layout_constraintStart_toEndOf="@id/btn_start_recipe"
             style="?android:attr/borderlessButtonStyle"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorPrimary"
             android:text="@string/ingredients_recipe_button" />
     </android.support.constraint.ConstraintLayout>
 

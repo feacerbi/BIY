@@ -11,12 +11,9 @@ import android.widget.Toast;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
-
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.adapters.IRecipeClickListener;
 import br.com.felipeacerbi.biy.adapters.IngredientsAdapter;
-import br.com.felipeacerbi.biy.models.Ingredient;
+import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.utils.Constants;
 import butterknife.BindView;

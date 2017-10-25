@@ -38,13 +38,13 @@ dependencies {
     // Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
 
-    // Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-moshi:2.3.0'
-
-    // Dagger2
-    compile 'com.google.dagger:dagger:2.10'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
+//    // Retrofit
+//    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+//    compile 'com.squareup.retrofit2:converter-moshi:2.3.0'
+//
+//    // Dagger2
+//    compile 'com.google.dagger:dagger:2.10'
+//    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
 
     // Butter Knife
     compile 'com.jakewharton:butterknife:8.5.1'
@@ -64,6 +64,12 @@ dependencies {
 
     // Gson
     compile 'com.google.code.gson:gson:2.8.2'
+
+    // ExoPlayer
+    compile 'com.google.android.exoplayer:exoplayer:r2.5.3'
+
+    // ViewPageIndicator
+    compile 'com.github.tabassumLatif:ViewPagerIndicator:1.0.3'
 }
 
 repositories {

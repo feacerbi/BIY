@@ -19,4 +19,9 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="dot_divider">.</string>
     <string name="recipe_step_image_description">Recipe step image</string>
+    <string name="finish_cooking_message">Finished cooking?</string>
+    <string name="affirmative_button_text">Yes</string>
+    <string name="negative_button_text">No</string>
+    <string name="finish_recipe_toast_message">Bon appetit!</string>
+    <string name="directions_title_text">Directions</string>
 </resources>

@@ -6,39 +6,38 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.adapters.RecipesAdapter;
-import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
-import br.com.felipeacerbi.biy.models.Recipe;
-import br.com.felipeacerbi.biy.models.RecipesArrayList;
-import br.com.felipeacerbi.biy.repository.DataManager;
-import br.com.felipeacerbi.biy.utils.RequestCallback;
+import br.com.felipeacerbi.biy.adapters.RecipeStepsAdapter;
+import br.com.felipeacerbi.biy.adapters.listeners.IRecipeStepClickListener;
+import br.com.felipeacerbi.biy.models.Step;
+import br.com.felipeacerbi.biy.models.StepsArrayList;
+import br.com.felipeacerbi.biy.utils.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
 
-public class RecipesFragment extends Fragment implements IRecipeClickListener {
+public class StepsListFragment extends Fragment implements IRecipeStepClickListener {
 
-    @BindView(R.id.rv_recipes_list)
-    RecyclerView mRecipesList;
+    @BindView(R.id.rv_recipe_steps_list)
+    RecyclerView mStepsList;
 
-    @State(RecipesArrayList.class)
-    RecipesArrayList mRecipes;
+    @State(StepsArrayList.class)
+    StepsArrayList mSteps;
 
-    private IRecipeClickListener mListener;
-    private RecipesAdapter mAdapter;
-    private DataManager mDataManager;
+    private IRecipeStepClickListener mListener;
+    private RecipeStepsAdapter mAdapter;
 
-    public RecipesFragment() {
+    public StepsListFragment() {
         // Required empty public constructor
     }
 
@@ -52,12 +51,18 @@ public class RecipesFragment extends Fragment implements IRecipeClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_recipes_list, container, false);
+        return inflater.inflate(R.layout.fragment_steps_list, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Bundle arguments = getArguments();
+
+        if(arguments != null) {
+            mSteps = Parcels.unwrap(arguments.getParcelable(Constants.STEPS_EXTRA));
+        }
         
         setUpUI(view);
     }
@@ -65,41 +70,20 @@ public class RecipesFragment extends Fragment implements IRecipeClickListener {
     private void setUpUI(View view) {
         ButterKnife.bind(this, view);
 
-        mAdapter = new RecipesAdapter(new ArrayList<Recipe>(), this);
-        mRecipesList.setAdapter(mAdapter);
+        mAdapter = new RecipeStepsAdapter(new ArrayList<Step>(), this);
+        mStepsList.setAdapter(mAdapter);
 
-        mDataManager = new DataManager(getSupportActivity());
-
-        if(mRecipes != null) {
-            setUpAdapter(mRecipes);
-        } else {
-            requestNewRecipes();
-        }
+        setUpAdapter(mSteps);
     }
 
-    private void requestNewRecipes() {
-        mDataManager.requestRecipes(new RequestCallback<List<Recipe>>() {
-            @Override
-            public void onSuccess(List<Recipe> recipes) {
-                setUpAdapter(recipes);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.d("Frag", "Error: " + error);
-            }
-        });
-    }
-
-    private void setUpAdapter(List<Recipe> recipes) {
-        mRecipes = new RecipesArrayList(recipes);
-        mAdapter.setItems(recipes);
+    private void setUpAdapter(List<Step> steps) {
+        mAdapter.setItems(steps);
     }
 
     @Override
-    public void onRecipeClicked(Recipe recipe) {
+    public void onRecipeStepClicked(Step step) {
         if (mListener != null) {
-            mListener.onRecipeClicked(recipe);
+            mListener.onRecipeStepClicked(step);
         }
     }
 
@@ -115,8 +99,8 @@ public class RecipesFragment extends Fragment implements IRecipeClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof IRecipeClickListener) {
-            mListener = (IRecipeClickListener) context;
+        if (context instanceof IRecipeStepClickListener) {
+            mListener = (IRecipeStepClickListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement IRecipeClickListener");

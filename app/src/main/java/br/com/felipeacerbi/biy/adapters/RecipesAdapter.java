@@ -20,6 +20,7 @@ import java.util.Locale;
 import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.activities.IngredientsActivity;
 import br.com.felipeacerbi.biy.activities.StartRecipeActivity;
+import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.utils.Constants;
 import butterknife.BindView;
@@ -95,9 +96,9 @@ public class RecipesAdapter extends RecyclerView.Adapter {
     private Pair<String, Integer> getRecipeDifficulty(Recipe recipe) {
         int stepsCount = recipe.getSteps().size();
 
-        if(stepsCount <= mListener.getContext().getResources().getInteger(R.integer.easy_recipe_steps_count)) {
+        if (stepsCount <= mListener.getContext().getResources().getInteger(R.integer.easy_recipe_steps_count)) {
             return new Pair<String, Integer>(mListener.getContext().getString(R.string.easy_recipe), mListener.getContext().getResources().getColor(R.color.easy_green, mListener.getContext().getTheme()));
-        } else if(stepsCount <= mListener.getContext().getResources().getInteger(R.integer.medium_recipe_steps_count)) {
+        } else if (stepsCount <= mListener.getContext().getResources().getInteger(R.integer.medium_recipe_steps_count)) {
             return new Pair<String, Integer>(mListener.getContext().getString(R.string.medium_recipe), mListener.getContext().getResources().getColor(R.color.medium_yellow, mListener.getContext().getTheme()));
         } else {
             return new Pair<String, Integer>(mListener.getContext().getString(R.string.hard_recipe), mListener.getContext().getResources().getColor(R.color.hard_red, mListener.getContext().getTheme()));

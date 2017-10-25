@@ -1,13 +1,13 @@
 package br.com.felipeacerbi.biy.activities;
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import br.com.felipeacerbi.biy.adapters.IRecipeClickListener;
 import br.com.felipeacerbi.biy.R;
+import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
