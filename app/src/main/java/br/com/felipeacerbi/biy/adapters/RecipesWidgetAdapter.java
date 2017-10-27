@@ -1,37 +1,30 @@
 package br.com.felipeacerbi.biy.adapters;
 
-import android.content.Intent;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.parceler.Parcels;
-
 import java.util.List;
 import java.util.Locale;
 
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.activities.IngredientsActivity;
-import br.com.felipeacerbi.biy.activities.StartRecipeActivity;
 import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
-import br.com.felipeacerbi.biy.utils.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecipesAdapter extends RecyclerView.Adapter {
+public class RecipesWidgetAdapter extends RecyclerView.Adapter {
 
     private List<Recipe> mRecipes;
     private IRecipeClickListener mListener;
 
-    public RecipesAdapter(List<Recipe> mRecipes, IRecipeClickListener mListener) {
+    public RecipesWidgetAdapter(List<Recipe> mRecipes, IRecipeClickListener mListener) {
         this.mRecipes = mRecipes;
         this.mListener = mListener;
     }
@@ -39,7 +32,7 @@ public class RecipesAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recipe_list_item, parent, false);
+                .inflate(R.layout.recipe_widget_list_item, parent, false);
         return new RecipeViewHolder(itemView);
     }
 
@@ -71,26 +64,12 @@ public class RecipesAdapter extends RecyclerView.Adapter {
                 .error(R.drawable.recipe_placeholder)
                 .into(recipeViewHolder.photo);
 
-        recipeViewHolder.ingredients.setOnClickListener(new View.OnClickListener() {
+        recipeViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.getContext().startActivity(prepareRecipeIntent(IngredientsActivity.class, recipe));
+                mListener.onRecipeClicked(recipe);
             }
         });
-
-        recipeViewHolder.start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.getContext().startActivity(prepareRecipeIntent(StartRecipeActivity.class, recipe));
-            }
-        });
-
-    }
-
-    private Intent prepareRecipeIntent(Class clazz, Recipe recipe) {
-        Intent intent = new Intent(mListener.getContext(), clazz);
-        intent.putExtra(Constants.RECIPE_EXTRA, Parcels.wrap(recipe));
-        return intent;
     }
 
     public void setItems(List<Recipe> items) {
@@ -109,8 +88,6 @@ public class RecipesAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_recipe_difficulty) TextView difficulty;
         @BindView(R.id.tv_ingredients) TextView ingredientsCount;
         @BindView(R.id.tv_servings) TextView servings;
-        @BindView(R.id.btn_start_recipe) Button start;
-        @BindView(R.id.btn_show_ingredients) Button ingredients;
         @BindView(R.id.iv_photo) ImageView photo;
 
         RecipeViewHolder(View itemView) {

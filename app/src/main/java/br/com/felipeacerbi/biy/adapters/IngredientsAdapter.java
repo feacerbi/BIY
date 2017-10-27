@@ -1,7 +1,6 @@
 package br.com.felipeacerbi.biy.adapters;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,9 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Locale;
 
-import br.com.felipeacerbi.biy.utils.IngredientMeasures;
 import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.models.Ingredient;
+import br.com.felipeacerbi.biy.utils.IngredientMeasures;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,7 +41,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter {
 
         String quantiy = String.valueOf(ingredient.getQuantity());
         boolean isFraction = quantiy.contains(".") && quantiy.charAt(quantiy.lastIndexOf(".") + 1) != '0';
-        Log.d("Adap", "char: " + quantiy.lastIndexOf(".") + 1 + " frac " + quantiy.charAt(quantiy.lastIndexOf(".") + 1));
 
         ingredientViewHolder.quantity.setText(
                 String.format(Locale.getDefault(),

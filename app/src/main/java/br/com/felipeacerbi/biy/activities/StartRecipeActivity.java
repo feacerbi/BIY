@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -31,22 +32,13 @@ import tabi.vpindicator.ViewPagerIndicator;
 
 public class StartRecipeActivity extends AppCompatActivity implements IRecipeStepClickListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private RecipeStepsPagerAdapter mPagerAdapter;
     private Recipe mRecipe;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.main_content)
     CoordinatorLayout mainContent;
-    @BindView(R.id.vp_steps)
+    @Nullable @BindView(R.id.vp_steps)
     ViewPager mViewPager;
     @BindView(R.id.vpi_container_indicator)
     ViewPagerIndicator mViewPagerIndicator;
@@ -66,7 +58,7 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
 
         setUpCommonUI();
 
-        if(ButterKnife.findById(this, R.id.vp_steps) != null) {
+        if(mViewPager != null) {
             setUpMobileUI();
         } else {
             setUpTabletUI();
@@ -74,7 +66,7 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
     }
 
     private void setUpCommonUI() {
-        mToolbar = ButterKnife.findById(this, R.id.toolbar);
+        ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
         setTitle(mRecipe.getName());
@@ -86,7 +78,6 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
             }
         });
 
-        fabIngredients = ButterKnife.findById(this, R.id.fab_ingredients);
         fabIngredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,7 +91,15 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mPagerAdapter = new RecipeStepsPagerAdapter(getSupportFragmentManager(), mRecipe.getSteps());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+        RecipeStepsPagerAdapter mPagerAdapter = new RecipeStepsPagerAdapter(getSupportFragmentManager(), mRecipe.getSteps());
 
         ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
@@ -280,5 +279,10 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
     @Override
     public Context getContext() {
         return this;
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
     }
 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.adapters.RecipesAdapter;
+import br.com.felipeacerbi.biy.adapters.RecipesWidgetAdapter;
 import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.models.RecipesArrayList;
@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
 
-public class RecipesFragment extends Fragment implements IRecipeClickListener {
+public class RecipesWidgetFragment extends Fragment implements IRecipeClickListener {
 
     @BindView(R.id.rv_recipes_list)
     RecyclerView mRecipesList;
@@ -36,10 +36,10 @@ public class RecipesFragment extends Fragment implements IRecipeClickListener {
     RecipesArrayList mRecipes;
 
     private IRecipeClickListener mListener;
-    private RecipesAdapter mAdapter;
+    private RecipesWidgetAdapter mAdapter;
     private DataManager mDataManager;
 
-    public RecipesFragment() {
+    public RecipesWidgetFragment() {
         // Required empty public constructor
     }
 
@@ -66,7 +66,7 @@ public class RecipesFragment extends Fragment implements IRecipeClickListener {
     private void setUpUI(View view) {
         ButterKnife.bind(this, view);
 
-        mAdapter = new RecipesAdapter(new ArrayList<Recipe>(), this);
+        mAdapter = new RecipesWidgetAdapter(new ArrayList<Recipe>(), this);
         mRecipesList.setAdapter(mAdapter);
 
         mDataManager = new DataManager(getSupportActivity());

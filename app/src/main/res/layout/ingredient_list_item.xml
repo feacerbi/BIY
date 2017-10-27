@@ -14,7 +14,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:tint="@color/colorAccent"
+        android:contentDescription="@string/ingredient_icon_description"
+        android:alpha="0.3"
+        android:tint="@android:color/black"
         android:src="@drawable/ic_shopping_cart_black_24dp"/>
 
     <TextView

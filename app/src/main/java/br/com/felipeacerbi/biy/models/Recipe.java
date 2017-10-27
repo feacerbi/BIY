@@ -1,8 +1,13 @@
 package br.com.felipeacerbi.biy.models;
 
+import android.content.Context;
+import android.support.v4.util.Pair;
+
 import org.parceler.Parcel;
 
 import java.util.List;
+
+import br.com.felipeacerbi.biy.R;
 
 @Parcel
 public class Recipe {
@@ -51,7 +56,7 @@ public class Recipe {
 	}
 
 	public int getId(){
-		return id;
+		return id - 1;
 	}
 
 	public void setSteps(List<Step> steps){
@@ -63,15 +68,27 @@ public class Recipe {
 	}
 
 	@Override
- 	public String toString(){
-		return 
-			"Recipe{" +
-			"image = '" + image + '\'' + 
-			",servings = '" + servings + '\'' + 
-			",name = '" + name + '\'' + 
-			",ingredients = '" + ingredients + '\'' + 
-			",id = '" + id + '\'' + 
-			",steps = '" + steps + '\'' + 
-			"}";
+	public String toString(){
+		return
+				"Recipe{" +
+						"image = '" + image + '\'' +
+						",servings = '" + servings + '\'' +
+						",name = '" + name + '\'' +
+						",ingredients = '" + ingredients + '\'' +
+						",id = '" + id + '\'' +
+						",steps = '" + steps + '\'' +
+						"}";
+	}
+
+	public static Pair<String, Integer> getRecipeDifficulty(Context context, Recipe recipe) {
+		int stepsCount = recipe.getSteps().size();
+
+		if (stepsCount <= context.getResources().getInteger(R.integer.easy_recipe_steps_count)) {
+			return new Pair<String, Integer>(context.getString(R.string.easy_recipe), context.getResources().getColor(R.color.easy_green, context.getTheme()));
+		} else if (stepsCount <= context.getResources().getInteger(R.integer.medium_recipe_steps_count)) {
+			return new Pair<String, Integer>(context.getString(R.string.medium_recipe), context.getResources().getColor(R.color.medium_yellow, context.getTheme()));
+		} else {
+			return new Pair<String, Integer>(context.getString(R.string.hard_recipe), context.getResources().getColor(R.color.hard_red, context.getTheme()));
 		}
+	}
 }

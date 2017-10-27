@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_ingredient_description"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:alpha="0.5"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_alignParentStart="true"
+        tools:text="Mascapone Cheese (Room Temperature)"/>
+
+    <RelativeLayout
+        android:id="@+id/cl_ingredient_quantity"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:id="@+id/tv_ingredient_quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"
+            android:textColor="@color/colorAccent"
+            android:maxLines="1"
+            android:gravity="center"
+            android:textStyle="bold"
+            tools:text="500"/>
+
+        <TextView
+            android:id="@+id/tv_ingredient_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:alpha="0.5"
+            android:maxLines="1"
+            android:gravity="center"
+            android:layout_below="@id/tv_ingredient_quantity"
+            tools:text="grams"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:alpha="0.1"
+        android:layout_below="@id/tv_ingredient_description"
+        app:layout_constraintStart_toStartOf="@id/tv_ingredient_description"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</RelativeLayout>

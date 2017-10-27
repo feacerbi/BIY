@@ -1,7 +1,6 @@
 package br.com.felipeacerbi.biy.repository;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -9,7 +8,6 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -61,7 +59,7 @@ public class JsonHelper {
             e.printStackTrace();
             return null;
         }
-        Log.d("Help", json);
+
         return json;
 
     }
