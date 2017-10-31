@@ -36,56 +36,58 @@ public class IngredientsWidget extends AppWidgetProvider {
             @Override
             public void onSuccess(List<Recipe> recipes) {
                 int recipeId = IngredientsWidgetConfigureActivity.loadRecipePref(context, appWidgetId);
-                Recipe recipe = recipes.get(recipeId);
+                if(recipeId != Constants.INVALID_RECIPE_ID) {
+                    Recipe recipe = recipes.get(recipeId);
 
-                // Set up the intent that starts the StackViewService, which will
-                // provide the views for this collection.
-                Intent intent = new Intent(context, ListWidgetService.class);
-                // Add the app widget ID to the intent extras.
-                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+                    // Set up the intent that starts the StackViewService, which will
+                    // provide the views for this collection.
+                    Intent intent = new Intent(context, ListWidgetService.class);
+                    // Add the app widget ID to the intent extras.
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-                // Instantiate the RemoteViews object for the app widget layout.
-                RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
+                    // Instantiate the RemoteViews object for the app widget layout.
+                    RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
 
-                // Set up the RemoteViews object to use a RemoteViews adapter.
-                // This adapter connects
-                // to a RemoteViewsService  through the specified intent.
-                // This is how you populate the data.
-                rv.setRemoteAdapter(R.id.lv_ingredients_list, intent);
-                // The empty view is displayed when the collection has no items.
-                // It should be in the same layout used to instantiate the RemoteViews
-                // object above.
-                rv.setEmptyView(R.id.lv_ingredients_list, R.id.tv_empty_ingredients);
+                    // Set up the RemoteViews object to use a RemoteViews adapter.
+                    // This adapter connects
+                    // to a RemoteViewsService  through the specified intent.
+                    // This is how you populate the data.
+                    rv.setRemoteAdapter(R.id.lv_ingredients_list, intent);
+                    // The empty view is displayed when the collection has no items.
+                    // It should be in the same layout used to instantiate the RemoteViews
+                    // object above.
+                    rv.setEmptyView(R.id.lv_ingredients_list, R.id.tv_empty_ingredients);
 
-                rv.setTextViewText(R.id.tv_title, recipe.getName());
+                    rv.setTextViewText(R.id.tv_title, recipe.getName());
 
-                Intent startMainIntent = new Intent(context, RecipesActivity.class);
-                PendingIntent startMainPendingIntent = PendingIntent.getActivity(
-                        context,
-                        0,
-                        startMainIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+                    Intent startMainIntent = new Intent(context, RecipesActivity.class);
+                    PendingIntent startMainPendingIntent = PendingIntent.getActivity(
+                            context,
+                            0,
+                            startMainIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
 
-                Intent startRecipeIntent = new Intent(context, StartRecipeActivity.class);
-                startRecipeIntent.putExtra(Constants.RECIPE_EXTRA, Parcels.wrap(recipe));
-                PendingIntent startRecipePendingIntent = PendingIntent.getActivity(
-                        context,
-                        0,
-                        startRecipeIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+                    Intent startRecipeIntent = new Intent(context, StartRecipeActivity.class);
+                    startRecipeIntent.putExtra(Constants.RECIPE_EXTRA, Parcels.wrap(recipe));
+                    PendingIntent startRecipePendingIntent = PendingIntent.getActivity(
+                            context,
+                            appWidgetId,
+                            startRecipeIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
 
-                rv.setOnClickPendingIntent(R.id.iv_start, startRecipePendingIntent);
-                rv.setOnClickPendingIntent(R.id.tv_title, startMainPendingIntent);
-                rv.setOnClickPendingIntent(R.id.tv_empty_ingredients, startMainPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.iv_start, startRecipePendingIntent);
+                    rv.setOnClickPendingIntent(R.id.tv_title, startMainPendingIntent);
+                    rv.setOnClickPendingIntent(R.id.tv_empty_ingredients, startMainPendingIntent);
 
-                // Instruct the widget manager to update the widget
-                appWidgetManager.updateAppWidget(appWidgetId, rv);
+                    // Instruct the widget manager to update the widget
+                    appWidgetManager.updateAppWidget(appWidgetId, rv);
+                }
             }
 
             @Override
             public void onError(String error) {
-                Log.d("Frag", "Error: " + error);
+                Log.d("Widget", "Error: " + error);
             }
         });
     }
@@ -96,7 +98,7 @@ public class IngredientsWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+//        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override

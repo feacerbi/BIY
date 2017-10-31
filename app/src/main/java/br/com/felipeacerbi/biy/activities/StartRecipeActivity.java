@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -91,14 +90,6 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        /*
-      The {@link android.support.v4.view.PagerAdapter} that will provide
-      fragments for each of the sections. We use a
-      {@link FragmentPagerAdapter} derivative, which will keep every
-      loaded fragment in memory. If this becomes too memory intensive, it
-      may be best to switch to a
-      {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
         RecipeStepsPagerAdapter mPagerAdapter = new RecipeStepsPagerAdapter(getSupportFragmentManager(), mRecipe.getSteps());
 
         ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -279,10 +270,5 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
     @Override
     public Context getContext() {
         return this;
-    }
-
-    @Override
-    public void onBackPressed() {
-        NavUtils.navigateUpFromSameTask(this);
     }
 }

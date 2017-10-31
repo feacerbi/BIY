@@ -71,7 +71,7 @@ public class IngredientsWidgetConfigureActivity extends AppCompatActivity implem
     // If there is no preference saved, get the default from a resource
     static int loadRecipePref(Context context, int appWidgetId) {
         SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0);
-        return prefs.getInt(Constants.PREF_RECIPE_KEY + appWidgetId, 0);
+        return prefs.getInt(Constants.PREF_RECIPE_KEY + appWidgetId, Constants.INVALID_RECIPE_ID);
     }
 
     static void deleteRecipePref(Context context, int appWidgetId) {
