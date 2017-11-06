@@ -1,4 +1,4 @@
-package br.com.felipeacerbi.biy.fragments;
+package br.com.felipeacerbi.biy.widget;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.adapters.RecipesWidgetAdapter;
 import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.models.RecipesArrayList;

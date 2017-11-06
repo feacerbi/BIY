@@ -1,9 +1,11 @@
 package br.com.felipeacerbi.biy.models;
 
+import android.support.annotation.NonNull;
+
 import org.parceler.Parcel;
 
 @Parcel
-public class Ingredient {
+public class Ingredient implements Comparable<Ingredient> {
 
 	private String ingredient;
 	private float quantity;
@@ -42,4 +44,9 @@ public class Ingredient {
 			",ingredient = '" + ingredient + '\'' + 
 			"}";
 		}
+
+	@Override
+	public int compareTo(@NonNull Ingredient ingredient) {
+		return getIngredient().toLowerCase().trim().compareTo(ingredient.getIngredient().toLowerCase().trim());
+	}
 }

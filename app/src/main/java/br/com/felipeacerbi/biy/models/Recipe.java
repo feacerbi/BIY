@@ -1,6 +1,7 @@
 package br.com.felipeacerbi.biy.models;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
 import org.parceler.Parcel;
@@ -10,7 +11,7 @@ import java.util.List;
 import br.com.felipeacerbi.biy.R;
 
 @Parcel
-public class Recipe {
+public class Recipe implements Comparable<Recipe> {
 
 	private int id;
 	private String name;
@@ -90,5 +91,10 @@ public class Recipe {
 		} else {
 			return new Pair<String, Integer>(context.getString(R.string.hard_recipe), context.getResources().getColor(R.color.hard_red, context.getTheme()));
 		}
+	}
+
+	@Override
+	public int compareTo(@NonNull Recipe recipe) {
+		return getName().toLowerCase().trim().compareTo(recipe.getName().toLowerCase().trim());
 	}
 }

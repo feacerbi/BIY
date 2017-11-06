@@ -1,4 +1,4 @@
-package br.com.felipeacerbi.biy.adapters;
+package br.com.felipeacerbi.biy.widget;
 
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;

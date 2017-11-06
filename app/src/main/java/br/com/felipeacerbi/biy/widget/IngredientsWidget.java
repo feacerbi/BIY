@@ -35,10 +35,19 @@ public class IngredientsWidget extends AppWidgetProvider {
         dataManager.requestRecipes(new RequestCallback<List<Recipe>>() {
             @Override
             public void onSuccess(List<Recipe> recipes) {
+                Recipe recipe = null;
                 int recipeId = IngredientsWidgetConfigureActivity.loadRecipePref(context, appWidgetId);
-                if(recipeId != Constants.INVALID_RECIPE_ID) {
-                    Recipe recipe = recipes.get(recipeId);
 
+                if(recipeId != Constants.INVALID_RECIPE_ID) {
+                    for (Recipe temp : recipes) {
+                        if (temp.getId() == recipeId) {
+                            recipe = temp;
+                            break;
+                        }
+                    }
+                }
+
+                if(recipe != null) {
                     // Set up the intent that starts the StackViewService, which will
                     // provide the views for this collection.
                     Intent intent = new Intent(context, ListWidgetService.class);
@@ -98,7 +107,6 @@ public class IngredientsWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-//        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     @Override

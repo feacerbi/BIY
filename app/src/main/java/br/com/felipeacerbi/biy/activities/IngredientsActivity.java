@@ -44,7 +44,7 @@ public class IngredientsActivity extends AppCompatActivity implements IRecipeCli
 
         String title = mRecipe.getName();
         if(title.charAt(title.length() - 1) == 's') {
-            title += " Ingredients";
+            title += "' Ingredients";
         } else {
             title += "'s Ingredients";
         }
