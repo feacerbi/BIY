@@ -34,7 +34,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Step step = mSteps.get(position);
         final RecipeStepViewHolder recipeStepViewHolder = (RecipeStepViewHolder) holder;
 
@@ -47,7 +47,7 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View view) {
                 mListener.onRecipeStepClicked(step);
-                mSelectedItem = position;
+                mSelectedItem = recipeStepViewHolder.getAdapterPosition();
                 notifyDataSetChanged();
             }
         });

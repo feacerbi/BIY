@@ -16,11 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.models.RecipesArrayList;
 import br.com.felipeacerbi.biy.repository.DataManager;
 import br.com.felipeacerbi.biy.utils.RequestCallback;
+import br.com.felipeacerbi.biy.widget.listeners.IRecipeClickListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import icepick.Icepick;

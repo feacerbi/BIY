@@ -17,7 +17,6 @@ import java.util.List;
 
 import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.adapters.RecipesAdapter;
-import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.models.RecipesArrayList;
 import br.com.felipeacerbi.biy.repository.DataManager;
@@ -27,7 +26,7 @@ import butterknife.ButterKnife;
 import icepick.Icepick;
 import icepick.State;
 
-public class RecipesFragment extends Fragment implements IRecipeClickListener {
+public class RecipesFragment extends Fragment {
 
     @BindView(R.id.rv_recipes_list)
     RecyclerView mRecipesList;
@@ -35,7 +34,6 @@ public class RecipesFragment extends Fragment implements IRecipeClickListener {
     @State(RecipesArrayList.class)
     RecipesArrayList mRecipes;
 
-    private IRecipeClickListener mListener;
     private RecipesAdapter mAdapter;
     private DataManager mDataManager;
 
@@ -66,7 +64,7 @@ public class RecipesFragment extends Fragment implements IRecipeClickListener {
     private void setUpUI(View view) {
         ButterKnife.bind(this, view);
 
-        mAdapter = new RecipesAdapter(new ArrayList<Recipe>(), this);
+        mAdapter = new RecipesAdapter(getActivity(), new ArrayList<Recipe>());
         mRecipesList.setAdapter(mAdapter);
 
         mDataManager = new DataManager(getSupportActivity());
@@ -98,36 +96,12 @@ public class RecipesFragment extends Fragment implements IRecipeClickListener {
     }
 
     @Override
-    public void onRecipeClicked(Recipe recipe) {
-        if (mListener != null) {
-            mListener.onRecipeClicked(recipe);
-        }
-    }
-
-    @Override
     public Context getContext() {
         return getSupportActivity();
     }
 
     private AppCompatActivity getSupportActivity() {
         return (AppCompatActivity) getActivity();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof IRecipeClickListener) {
-            mListener = (IRecipeClickListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement IRecipeClickListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     @Override

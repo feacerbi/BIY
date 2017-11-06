@@ -1,5 +1,6 @@
 package br.com.felipeacerbi.biy.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,6 @@ import java.util.Locale;
 import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.activities.IngredientsActivity;
 import br.com.felipeacerbi.biy.activities.StartRecipeActivity;
-import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.utils.Constants;
 import butterknife.BindView;
@@ -29,11 +29,11 @@ import butterknife.ButterKnife;
 public class RecipesAdapter extends RecyclerView.Adapter {
 
     private List<Recipe> mRecipes;
-    private IRecipeClickListener mListener;
+    private Context context;
 
-    public RecipesAdapter(List<Recipe> mRecipes, IRecipeClickListener mListener) {
+    public RecipesAdapter(Context context, List<Recipe> mRecipes) {
         this.mRecipes = mRecipes;
-        this.mListener = mListener;
+        this.context = context;
     }
 
     @Override
@@ -50,20 +50,20 @@ public class RecipesAdapter extends RecyclerView.Adapter {
 
         recipeViewHolder.name.setText(recipe.getName());
 
-        Pair<String, Integer> difficulty = Recipe.getRecipeDifficulty(mListener.getContext(), recipe);
+        Pair<String, Integer> difficulty = Recipe.getRecipeDifficulty(context, recipe);
         recipeViewHolder.difficulty.setText(difficulty.first);
         recipeViewHolder.difficulty.setTextColor(difficulty.second);
 
         recipeViewHolder.ingredientsCount.setText(String.format(
                 Locale.getDefault(),
-                mListener.getContext().getResources().getString(R.string.card_ingredients),
+                context.getResources().getString(R.string.card_ingredients),
                 recipe.getIngredients().size()));
         recipeViewHolder.servings.setText(String.format(
                 Locale.getDefault(),
-                mListener.getContext().getString(R.string.card_servings),
+                context.getString(R.string.card_servings),
                 recipe.getServings()));
 
-        Picasso.with(mListener.getContext())
+        Picasso.with(context)
                 .load(recipe.getImage().isEmpty() ? "error" : recipe.getImage())
                 .fit()
                 .centerCrop()
@@ -74,21 +74,21 @@ public class RecipesAdapter extends RecyclerView.Adapter {
         recipeViewHolder.ingredients.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.getContext().startActivity(prepareRecipeIntent(IngredientsActivity.class, recipe));
+                context.startActivity(prepareRecipeIntent(IngredientsActivity.class, recipe));
             }
         });
 
         recipeViewHolder.start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.getContext().startActivity(prepareRecipeIntent(StartRecipeActivity.class, recipe));
+                context.startActivity(prepareRecipeIntent(StartRecipeActivity.class, recipe));
             }
         });
 
     }
 
     private Intent prepareRecipeIntent(Class clazz, Recipe recipe) {
-        Intent intent = new Intent(mListener.getContext(), clazz);
+        Intent intent = new Intent(context, clazz);
         intent.putExtra(Constants.RECIPE_EXTRA, Parcels.wrap(recipe));
         return intent;
     }

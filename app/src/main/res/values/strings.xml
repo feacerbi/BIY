@@ -28,4 +28,10 @@
     <string name="start_recipe_widget_description">Start recipe icon</string>
     <string name="widget_no_items">No ingredients.</string>
     <string name="ingredient_icon_description">Ingredient icon</string>
+    <string name="ingredients_title_plural">\' Ingredients</string>
+    <string name="ingredients_title_singular">\'s Ingredients</string>
+    <string name="rewind_button_description">5 seconds rewind button.</string>
+    <string name="play_button_description">Play button.</string>
+    <string name="pause_button_description">Pause button.</string>
+    <string name="replay_button_description">Replay button.</string>
 </resources>

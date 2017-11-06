@@ -20,6 +20,7 @@ public class Recipe implements Comparable<Recipe> {
 	private List<Ingredient> ingredients;
 	private List<Step> steps;
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setImage(String image){
 		this.image = image;
 	}
@@ -60,6 +61,7 @@ public class Recipe implements Comparable<Recipe> {
 		return id - 1;
 	}
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setSteps(List<Step> steps){
 		this.steps = steps;
 	}
@@ -85,11 +87,11 @@ public class Recipe implements Comparable<Recipe> {
 		int stepsCount = recipe.getSteps().size();
 
 		if (stepsCount <= context.getResources().getInteger(R.integer.easy_recipe_steps_count)) {
-			return new Pair<String, Integer>(context.getString(R.string.easy_recipe), context.getResources().getColor(R.color.easy_green, context.getTheme()));
+			return new Pair<>(context.getString(R.string.easy_recipe), context.getResources().getColor(R.color.easy_green, context.getTheme()));
 		} else if (stepsCount <= context.getResources().getInteger(R.integer.medium_recipe_steps_count)) {
-			return new Pair<String, Integer>(context.getString(R.string.medium_recipe), context.getResources().getColor(R.color.medium_yellow, context.getTheme()));
+			return new Pair<>(context.getString(R.string.medium_recipe), context.getResources().getColor(R.color.medium_yellow, context.getTheme()));
 		} else {
-			return new Pair<String, Integer>(context.getString(R.string.hard_recipe), context.getResources().getColor(R.color.hard_red, context.getTheme()));
+			return new Pair<>(context.getString(R.string.hard_recipe), context.getResources().getColor(R.color.hard_red, context.getTheme()));
 		}
 	}
 

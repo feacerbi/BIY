@@ -69,7 +69,7 @@ public class MediaPlayer implements LifecycleObserver {
         mPlayer.prepare(videoSource, true, false);
     }
 
-    public void initializePlayer() {
+    private void initializePlayer() {
         if(mView.getVisibility() == View.VISIBLE) {
             createPlayer();
             preparePlayer();
@@ -83,7 +83,7 @@ public class MediaPlayer implements LifecycleObserver {
         }
     }
 
-    public void releasePlayer() {
+    private void releasePlayer() {
         if(mPlayer != null) {
             mPlaybackPosition = mPlayer.getCurrentPosition();
             mCurrentWindow = mPlayer.getCurrentWindowIndex();
@@ -93,12 +93,9 @@ public class MediaPlayer implements LifecycleObserver {
         }
     }
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public void clearPlayer() {
         mPlaybackPosition = C.TIME_UNSET;
         mCurrentWindow = C.INDEX_UNSET;
-    }
-
-    public SimpleExoPlayer getPlayer() {
-        return mPlayer;
     }
 }

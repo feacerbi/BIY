@@ -3,6 +3,7 @@ package br.com.felipeacerbi.biy.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -40,9 +41,6 @@ public class StepFragment extends Fragment {
     TextView tvDescription;
 
     @State(Step.class) Step mStep;
-    private MediaPlayer mPlayer;
-//    private IChangeStepListener mListener;
-
 
     public StepFragment() {
         // Required empty public constructor
@@ -55,14 +53,14 @@ public class StepFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_start_recipe, container, false);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         Bundle arguments = getArguments();
@@ -95,7 +93,7 @@ public class StepFragment extends Fragment {
             sepvPlayerView.setVisibility(View.VISIBLE);
             ivPhoto.setVisibility(View.INVISIBLE);
 
-            mPlayer = new MediaPlayer(getContext(), sepvPlayerView, Uri.parse(mStep.getVideoURL()), getLifecycle());
+            new MediaPlayer(getContext(), sepvPlayerView, Uri.parse(mStep.getVideoURL()), getLifecycle());
 
             if(getResources().getConfiguration().orientation == Constants.ORIENTATION_LANDSCAPE) {
 
@@ -145,28 +143,10 @@ public class StepFragment extends Fragment {
         return getActivity();
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof IChangeStepListener) {
-//            mListener = (IChangeStepListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement IRecipeClickListener");
-//        }
-//    }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
-
 
 }

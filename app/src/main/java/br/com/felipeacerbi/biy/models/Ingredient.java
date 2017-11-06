@@ -11,6 +11,7 @@ public class Ingredient implements Comparable<Ingredient> {
 	private float quantity;
 	private String measure;
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setQuantity(float quantity){
 		this.quantity = quantity;
 	}
@@ -19,6 +20,7 @@ public class Ingredient implements Comparable<Ingredient> {
 		return quantity;
 	}
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setMeasure(String measure){
 		this.measure = measure;
 	}
@@ -27,6 +29,7 @@ public class Ingredient implements Comparable<Ingredient> {
 		return measure;
 	}
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setIngredient(String ingredient){
 		this.ingredient = ingredient;
 	}

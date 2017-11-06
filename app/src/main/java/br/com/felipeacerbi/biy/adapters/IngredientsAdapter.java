@@ -53,11 +53,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter {
                         ingredient.getQuantity() > 1));
     }
 
-    public void setItems(List<Ingredient> items) {
-        mIngredients = items;
-        notifyDataSetChanged();
-    }
-
     @Override
     public int getItemCount() {
         return mIngredients.size();

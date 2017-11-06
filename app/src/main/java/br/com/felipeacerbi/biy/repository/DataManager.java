@@ -18,10 +18,8 @@ import io.reactivex.schedulers.Schedulers;
 public class DataManager {
 
     private JsonHelper jsonHelper;
-    private Context context;
 
     public DataManager(Context context) {
-        this.context = context;
         jsonHelper = new JsonHelper(context);
     }
 

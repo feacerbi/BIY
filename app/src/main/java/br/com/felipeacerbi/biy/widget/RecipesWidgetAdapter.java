@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
+import br.com.felipeacerbi.biy.widget.listeners.IRecipeClickListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -24,7 +24,7 @@ public class RecipesWidgetAdapter extends RecyclerView.Adapter {
     private List<Recipe> mRecipes;
     private IRecipeClickListener mListener;
 
-    public RecipesWidgetAdapter(List<Recipe> mRecipes, IRecipeClickListener mListener) {
+    RecipesWidgetAdapter(List<Recipe> mRecipes, IRecipeClickListener mListener) {
         this.mRecipes = mRecipes;
         this.mListener = mListener;
     }
@@ -72,7 +72,7 @@ public class RecipesWidgetAdapter extends RecyclerView.Adapter {
         });
     }
 
-    public void setItems(List<Recipe> items) {
+    void setItems(List<Recipe> items) {
         mRecipes = items;
         notifyItemRangeInserted(0, items.size() - 1);
     }

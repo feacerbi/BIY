@@ -16,6 +16,7 @@ public class Step implements Bundler<Step> {
 	private String thumbnailURL;
 	private String videoURL;
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setVideoURL(String videoURL){
 		this.videoURL = videoURL;
 	}
@@ -24,6 +25,7 @@ public class Step implements Bundler<Step> {
 		return videoURL;
 	}
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setDescription(String description){
 		this.description = description;
 	}
@@ -40,6 +42,7 @@ public class Step implements Bundler<Step> {
 		return id;
 	}
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setShortDescription(String shortDescription){
 		this.shortDescription = shortDescription;
 	}
@@ -48,6 +51,7 @@ public class Step implements Bundler<Step> {
 		return shortDescription;
 	}
 
+	@SuppressWarnings("UnusedDeclaration")
 	public void setThumbnailURL(String thumbnailURL){
 		this.thumbnailURL = thumbnailURL;
 	}

@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import br.com.felipeacerbi.biy.R;
-import br.com.felipeacerbi.biy.adapters.listeners.IRecipeClickListener;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.utils.Constants;
+import br.com.felipeacerbi.biy.widget.listeners.IRecipeClickListener;
 
 /**
  * The configuration screen for the {@link IngredientsWidget IngredientsWidget} AppWidget.
