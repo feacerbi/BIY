@@ -42,6 +42,14 @@ public class StepsListFragment extends Fragment implements IRecipeStepClickListe
         // Required empty public constructor
     }
 
+    public static StepsListFragment newInstance(List<Step> steps) {
+        StepsListFragment fragment = new StepsListFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.STEPS_EXTRA, Parcels.wrap(new StepsArrayList(steps)));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -5,6 +5,7 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
@@ -21,6 +22,10 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 public class MediaPlayer implements LifecycleObserver {
+
+    private static final String SAVE_POSITION_KEY = "position";
+    private static final String SAVE_WINDOW_KEY = "window";
+    private static final String SAVE_SHOULD_PLAY_KEY = "shouldPlay";
 
     private Context mContext;
 
@@ -50,6 +55,20 @@ public class MediaPlayer implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     void onPause() {
         releasePlayer();
+    }
+
+    public Bundle createSaveBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putLong(SAVE_POSITION_KEY, mPlaybackPosition);
+        bundle.putInt(SAVE_WINDOW_KEY, mCurrentWindow);
+        bundle.putBoolean(SAVE_SHOULD_PLAY_KEY, mShouldPlay);
+        return bundle;
+    }
+
+    public void restoreSaveBundle(Bundle bundle) {
+        mPlaybackPosition = bundle.getLong(SAVE_POSITION_KEY);
+        mCurrentWindow = bundle.getInt(SAVE_WINDOW_KEY);
+        mShouldPlay = bundle.getBoolean(SAVE_SHOULD_PLAY_KEY);
     }
 
     private void createPlayer() {

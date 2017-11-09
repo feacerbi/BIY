@@ -39,13 +39,13 @@ dependencies {
     // Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
-//    // Retrofit
-//    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-//    implementation 'com.squareup.retrofit2:converter-moshi:2.3.0'
-//
-//    // Dagger2
-//    implementation 'com.google.dagger:dagger:2.10'
-//    annotationProcessor 'com.google.dagger:dagger-implementationr:2.10'
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-moshi:2.3.0'
+
+    // Dagger2
+    implementation 'com.google.dagger:dagger:2.10'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.10'
 
     // Ice Pick
     implementation 'frankiesardo:icepick:3.2.0'

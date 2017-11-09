@@ -12,10 +12,16 @@ import java.util.Locale;
 import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.models.Ingredient;
 import br.com.felipeacerbi.biy.models.Recipe;
-import br.com.felipeacerbi.biy.repository.JsonHelper;
 import br.com.felipeacerbi.biy.utils.IngredientMeasures;
+import br.com.felipeacerbi.biy.utils.PreferencesUtils;
 
 public class ListWidgetService extends RemoteViewsService {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new ListRemoteViewsFactory(this.getApplicationContext(), intent);
@@ -25,8 +31,6 @@ public class ListWidgetService extends RemoteViewsService {
 class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context mContext;
-    private JsonHelper jsonHelper;
-
     private int mRecipeId;
     private Recipe mRecipe;
 
@@ -35,17 +39,17 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         int mAppWidgetId = intent.getIntExtra(
                 AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
-        mRecipeId = IngredientsWidgetConfigureActivity.loadRecipePref(mContext, mAppWidgetId);
+        mRecipeId = PreferencesUtils.loadRecipeId(mContext, mAppWidgetId);
     }
 
     @Override
     public void onCreate() {
-        jsonHelper = new JsonHelper(mContext);
     }
 
     @Override
     public void onDataSetChanged() {
-        requestNewRecipes();
+        List<Recipe> recipes = PreferencesUtils.loadRecipes(mContext);
+        mRecipe = recipes.get(mRecipeId);
     }
 
     @Override
@@ -102,10 +106,5 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public boolean hasStableIds() {
         return true;
-    }
-
-    private void requestNewRecipes() {
-        List<Recipe> recipes = jsonHelper.getRecipes();
-        mRecipe = recipes.get(mRecipeId);
     }
 }

@@ -1,8 +1,10 @@
 package br.com.felipeacerbi.biy.repository;
 
-import android.content.Context;
-
+import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.utils.RequestCallback;
@@ -15,13 +17,14 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+@Singleton
 public class DataManager {
 
-    private JsonHelper jsonHelper;
+    @Inject
+    RestDataSource restDataSource;
 
-    public DataManager(Context context) {
-        jsonHelper = new JsonHelper(context);
-    }
+    @Inject
+    DataManager() {}
 
     public void requestRecipes(RequestCallback<List<Recipe>> recipesRequest) {
         getRecipes()
@@ -34,14 +37,19 @@ public class DataManager {
         return Observable.create(new ObservableOnSubscribe<List<Recipe>>() {
             @Override
             public void subscribe(final ObservableEmitter<List<Recipe>> subscriber) throws Exception {
-                List<Recipe> recipes = jsonHelper.getRecipes();
+                restDataSource.getRecipes(new RequestCallback<List<Recipe>>() {
+                    @Override
+                    public void onSuccess(List<Recipe> recipes) {
+                        Collections.sort(recipes);
+                        subscriber.onNext(recipes);
+                        subscriber.onComplete();
+                    }
 
-                if(recipes != null) {
-                    subscriber.onNext(recipes);
-                    subscriber.onComplete();
-                } else {
-                    subscriber.onError(new Throwable("Error reading JSON file"));
-                }
+                    @Override
+                    public void onError(String error) {
+                        subscriber.onError(new Throwable(error));
+                    }
+                });
             }
         });
     }

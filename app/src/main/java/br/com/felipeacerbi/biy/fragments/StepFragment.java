@@ -30,6 +30,8 @@ import icepick.State;
 
 public class StepFragment extends Fragment {
 
+    private static final String SAVE_MEDIA_KEY = "media";
+
     TextView tvStepId;
     TextView tvShortDescription;
 
@@ -42,14 +44,29 @@ public class StepFragment extends Fragment {
 
     @State(Step.class) Step mStep;
 
+    MediaPlayer mediaPlayer;
+    Bundle mediaSaveState;
+
     public StepFragment() {
         // Required empty public constructor
+    }
+
+    public static StepFragment newInstance(Step step) {
+        StepFragment fragment = new StepFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(Constants.STEPS_EXTRA, Parcels.wrap(step));
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(SAVE_MEDIA_KEY)) {
+            mediaSaveState = savedInstanceState.getBundle(SAVE_MEDIA_KEY);
+        }
     }
 
     @Override
@@ -93,7 +110,10 @@ public class StepFragment extends Fragment {
             sepvPlayerView.setVisibility(View.VISIBLE);
             ivPhoto.setVisibility(View.INVISIBLE);
 
-            new MediaPlayer(getContext(), sepvPlayerView, Uri.parse(mStep.getVideoURL()), getLifecycle());
+            mediaPlayer = new MediaPlayer(getContext(), sepvPlayerView, Uri.parse(mStep.getVideoURL()), getLifecycle());
+            if(mediaSaveState != null) {
+                mediaPlayer.restoreSaveBundle(mediaSaveState);
+            }
 
             if(getResources().getConfiguration().orientation == Constants.ORIENTATION_LANDSCAPE) {
 
@@ -146,6 +166,12 @@ public class StepFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        if(mediaPlayer != null) {
+            mediaSaveState = mediaPlayer.createSaveBundle();
+            outState.putBundle(SAVE_MEDIA_KEY, mediaSaveState);
+        }
+
         Icepick.saveInstanceState(this, outState);
     }
 

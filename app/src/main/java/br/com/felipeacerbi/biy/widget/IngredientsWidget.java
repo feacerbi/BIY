@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import org.parceler.Parcels;
@@ -17,9 +16,8 @@ import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.activities.RecipesActivity;
 import br.com.felipeacerbi.biy.activities.StartRecipeActivity;
 import br.com.felipeacerbi.biy.models.Recipe;
-import br.com.felipeacerbi.biy.repository.DataManager;
 import br.com.felipeacerbi.biy.utils.Constants;
-import br.com.felipeacerbi.biy.utils.RequestCallback;
+import br.com.felipeacerbi.biy.utils.PreferencesUtils;
 
 /**
  * Implementation of App Widget functionality.
@@ -27,78 +25,68 @@ import br.com.felipeacerbi.biy.utils.RequestCallback;
  */
 public class IngredientsWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager,
-                                final int appWidgetId) {
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                int appWidgetId) {
 
-        DataManager dataManager = new DataManager(context);
+        List<Recipe> recipes = PreferencesUtils.loadRecipes(context);
 
-        dataManager.requestRecipes(new RequestCallback<List<Recipe>>() {
-            @Override
-            public void onSuccess(List<Recipe> recipes) {
-                Recipe recipe = null;
-                int recipeId = IngredientsWidgetConfigureActivity.loadRecipePref(context, appWidgetId);
+        Recipe recipe = null;
+        int recipeId = PreferencesUtils.loadRecipeId(context, appWidgetId);
 
-                if(recipeId != Constants.INVALID_RECIPE_ID) {
-                    for (Recipe temp : recipes) {
-                        if (temp.getId() == recipeId) {
-                            recipe = temp;
-                            break;
-                        }
-                    }
-                }
-
-                if(recipe != null) {
-                    // Set up the intent that starts the StackViewService, which will
-                    // provide the views for this collection.
-                    Intent intent = new Intent(context, ListWidgetService.class);
-                    // Add the app widget ID to the intent extras.
-                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-
-                    // Instantiate the RemoteViews object for the app widget layout.
-                    RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
-
-                    // Set up the RemoteViews object to use a RemoteViews adapter.
-                    // This adapter connects
-                    // to a RemoteViewsService  through the specified intent.
-                    // This is how you populate the data.
-                    rv.setRemoteAdapter(R.id.lv_ingredients_list, intent);
-                    // The empty view is displayed when the collection has no items.
-                    // It should be in the same layout used to instantiate the RemoteViews
-                    // object above.
-                    rv.setEmptyView(R.id.lv_ingredients_list, R.id.tv_empty_ingredients);
-
-                    rv.setTextViewText(R.id.tv_title, recipe.getName());
-
-                    Intent startMainIntent = new Intent(context, RecipesActivity.class);
-                    PendingIntent startMainPendingIntent = PendingIntent.getActivity(
-                            context,
-                            0,
-                            startMainIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    Intent startRecipeIntent = new Intent(context, StartRecipeActivity.class);
-                    startRecipeIntent.putExtra(Constants.RECIPE_EXTRA, Parcels.wrap(recipe));
-                    PendingIntent startRecipePendingIntent = PendingIntent.getActivity(
-                            context,
-                            appWidgetId,
-                            startRecipeIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT);
-
-                    rv.setOnClickPendingIntent(R.id.iv_start, startRecipePendingIntent);
-                    rv.setOnClickPendingIntent(R.id.tv_title, startMainPendingIntent);
-                    rv.setOnClickPendingIntent(R.id.tv_empty_ingredients, startMainPendingIntent);
-
-                    // Instruct the widget manager to update the widget
-                    appWidgetManager.updateAppWidget(appWidgetId, rv);
+        if(recipeId != Constants.INVALID_RECIPE_ID) {
+            for (Recipe temp : recipes) {
+                if (temp.getId() == recipeId) {
+                    recipe = temp;
+                    break;
                 }
             }
+        }
 
-            @Override
-            public void onError(String error) {
-                Log.d("Widget", "Error: " + error);
-            }
-        });
+        if(recipe != null) {
+            // Set up the intent that starts the StackViewService, which will
+            // provide the views for this collection.
+            Intent intent = new Intent(context, ListWidgetService.class);
+            // Add the app widget ID to the intent extras.
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+
+            // Instantiate the RemoteViews object for the app widget layout.
+            RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
+
+            // Set up the RemoteViews object to use a RemoteViews adapter.
+            // This adapter connects
+            // to a RemoteViewsService  through the specified intent.
+            // This is how you populate the data.
+            rv.setRemoteAdapter(R.id.lv_ingredients_list, intent);
+            // The empty view is displayed when the collection has no items.
+            // It should be in the same layout used to instantiate the RemoteViews
+            // object above.
+            rv.setEmptyView(R.id.lv_ingredients_list, R.id.tv_empty_ingredients);
+
+            rv.setTextViewText(R.id.tv_title, recipe.getName());
+
+            Intent startMainIntent = new Intent(context, RecipesActivity.class);
+            PendingIntent startMainPendingIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    startMainIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            Intent startRecipeIntent = new Intent(context, StartRecipeActivity.class);
+            startRecipeIntent.putExtra(Constants.RECIPE_EXTRA, Parcels.wrap(recipe));
+            PendingIntent startRecipePendingIntent = PendingIntent.getActivity(
+                    context,
+                    appWidgetId,
+                    startRecipeIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            rv.setOnClickPendingIntent(R.id.iv_start, startRecipePendingIntent);
+            rv.setOnClickPendingIntent(R.id.tv_title, startMainPendingIntent);
+            rv.setOnClickPendingIntent(R.id.tv_empty_ingredients, startMainPendingIntent);
+
+            // Instruct the widget manager to update the widget
+            appWidgetManager.updateAppWidget(appWidgetId, rv);
+        }
     }
 
     @Override
@@ -113,7 +101,7 @@ public class IngredientsWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds) {
         // When the user deletes the widget, delete the preference associated with it.
         for (int appWidgetId : appWidgetIds) {
-            IngredientsWidgetConfigureActivity.deleteRecipePref(context, appWidgetId);
+            PreferencesUtils.removeRecipeId(context, appWidgetId);
         }
     }
 

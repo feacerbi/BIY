@@ -23,7 +23,6 @@ import br.com.felipeacerbi.biy.fragments.StepFragment;
 import br.com.felipeacerbi.biy.fragments.StepsListFragment;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.models.Step;
-import br.com.felipeacerbi.biy.models.StepsArrayList;
 import br.com.felipeacerbi.biy.utils.Constants;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,17 +34,17 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.main_content)
+    @Nullable @BindView(R.id.main_content) // Not for tablet UI
     CoordinatorLayout mainContent;
-    @Nullable @BindView(R.id.vp_steps)
+    @Nullable @BindView(R.id.vp_steps) // Not for tablet UI
     ViewPager mViewPager;
-    @BindView(R.id.vpi_container_indicator)
+    @Nullable @BindView(R.id.vpi_container_indicator) // Not for tablet UI
     ViewPagerIndicator mViewPagerIndicator;
-    @BindView(R.id.fab_next)
+    @Nullable @BindView(R.id.fab_next) // Not for tablet UI
     FloatingActionButton fabNext;
     @BindView(R.id.fab_ingredients)
     FloatingActionButton fabIngredients;
-    @BindView(R.id.fab_previous)
+    @Nullable @BindView(R.id.fab_previous) // Not for tablet UI
     FloatingActionButton fabPrevious;
 
     @Override
@@ -57,10 +56,12 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
 
         setUpCommonUI();
 
-        if(mViewPager != null) {
-            setUpMobileUI();
-        } else {
+        boolean isTabletLayout = getResources().getBoolean(R.bool.tablet_layout);
+
+        if(isTabletLayout) {
             setUpTabletUI();
+        } else {
+            setUpMobileUI();
         }
     }
 
@@ -143,11 +144,7 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
     }
 
     private void setUpTabletUI() {
-        StepsListFragment stepsFragment = new StepsListFragment();
-
-        Bundle args = new Bundle();
-        args.putParcelable(Constants.STEPS_EXTRA, Parcels.wrap(new StepsArrayList(mRecipe.getSteps())));
-        stepsFragment.setArguments(args);
+        StepsListFragment stepsFragment = StepsListFragment.newInstance(mRecipe.getSteps());
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -158,11 +155,7 @@ public class StartRecipeActivity extends AppCompatActivity implements IRecipeSte
     }
 
     private void selectStep(Step step) {
-        StepFragment stepFragment = new StepFragment();
-
-        Bundle args = new Bundle();
-        args.putParcelable(Constants.STEP_EXTRA, Parcels.wrap(step));
-        stepFragment.setArguments(args);
+        StepFragment stepFragment = StepFragment.newInstance(step);
 
         getSupportFragmentManager()
                 .beginTransaction()

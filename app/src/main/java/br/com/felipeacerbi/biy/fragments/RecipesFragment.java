@@ -15,11 +15,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.adapters.RecipesAdapter;
+import br.com.felipeacerbi.biy.app.RecipesApplication;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.models.RecipesArrayList;
 import br.com.felipeacerbi.biy.repository.DataManager;
+import br.com.felipeacerbi.biy.utils.PreferencesUtils;
 import br.com.felipeacerbi.biy.utils.RequestCallback;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,8 +38,10 @@ public class RecipesFragment extends Fragment {
     @State(RecipesArrayList.class)
     RecipesArrayList mRecipes;
 
+    @Inject
+    DataManager mDataManager;
+
     private RecipesAdapter mAdapter;
-    private DataManager mDataManager;
 
     public RecipesFragment() {
         // Required empty public constructor
@@ -45,6 +51,8 @@ public class RecipesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
+
+        ((RecipesApplication) getActivity().getApplicationContext()).getRecipesComponent().inject(this);
     }
 
     @Override
@@ -67,8 +75,6 @@ public class RecipesFragment extends Fragment {
         mAdapter = new RecipesAdapter(getActivity(), new ArrayList<Recipe>());
         mRecipesList.setAdapter(mAdapter);
 
-        mDataManager = new DataManager(getSupportActivity());
-
         if(mRecipes != null) {
             setUpAdapter(mRecipes);
         } else {
@@ -81,6 +87,7 @@ public class RecipesFragment extends Fragment {
             @Override
             public void onSuccess(List<Recipe> recipes) {
                 setUpAdapter(recipes);
+                PreferencesUtils.storeRecipes(getActivity(), recipes);
             }
 
             @Override

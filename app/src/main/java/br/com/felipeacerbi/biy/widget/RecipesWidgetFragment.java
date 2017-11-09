@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,7 @@ import java.util.List;
 import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.models.RecipesArrayList;
-import br.com.felipeacerbi.biy.repository.DataManager;
-import br.com.felipeacerbi.biy.utils.RequestCallback;
+import br.com.felipeacerbi.biy.utils.PreferencesUtils;
 import br.com.felipeacerbi.biy.widget.listeners.IRecipeClickListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +34,6 @@ public class RecipesWidgetFragment extends Fragment implements IRecipeClickListe
 
     private IRecipeClickListener mListener;
     private RecipesWidgetAdapter mAdapter;
-    private DataManager mDataManager;
 
     public RecipesWidgetFragment() {
         // Required empty public constructor
@@ -68,27 +65,11 @@ public class RecipesWidgetFragment extends Fragment implements IRecipeClickListe
         mAdapter = new RecipesWidgetAdapter(new ArrayList<Recipe>(), this);
         mRecipesList.setAdapter(mAdapter);
 
-        mDataManager = new DataManager(getSupportActivity());
-
         if(mRecipes != null) {
             setUpAdapter(mRecipes);
         } else {
-            requestNewRecipes();
+            setUpAdapter(PreferencesUtils.loadRecipes(getActivity()));
         }
-    }
-
-    private void requestNewRecipes() {
-        mDataManager.requestRecipes(new RequestCallback<List<Recipe>>() {
-            @Override
-            public void onSuccess(List<Recipe> recipes) {
-                setUpAdapter(recipes);
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.d("Frag", "Error: " + error);
-            }
-        });
     }
 
     private void setUpAdapter(List<Recipe> recipes) {

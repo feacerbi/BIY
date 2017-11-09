@@ -3,13 +3,12 @@ package br.com.felipeacerbi.biy.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import br.com.felipeacerbi.biy.R;
 import br.com.felipeacerbi.biy.models.Recipe;
-import br.com.felipeacerbi.biy.utils.Constants;
+import br.com.felipeacerbi.biy.utils.PreferencesUtils;
 import br.com.felipeacerbi.biy.widget.listeners.IRecipeClickListener;
 
 /**
@@ -48,7 +47,7 @@ public class IngredientsWidgetConfigureActivity extends AppCompatActivity implem
 
     @Override
     public void onRecipeClicked(Recipe recipe) {
-        saveRecipePref(this, mAppWidgetId, recipe.getId());
+        PreferencesUtils.storeRecipeId(this, mAppWidgetId, recipe.getId());
 
         // It is the responsibility of the configuration activity to update the app widget
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
@@ -59,25 +58,6 @@ public class IngredientsWidgetConfigureActivity extends AppCompatActivity implem
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
         setResult(RESULT_OK, resultValue);
         finish();
-    }
-
-    static void saveRecipePref(Context context, int appWidgetId, int recipeId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0).edit();
-        prefs.putInt(Constants.PREF_RECIPE_KEY + appWidgetId, recipeId);
-        prefs.apply();
-    }
-
-    // Read the prefix from the SharedPreferences object for this widget.
-    // If there is no preference saved, get the default from a resource
-    static int loadRecipePref(Context context, int appWidgetId) {
-        SharedPreferences prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0);
-        return prefs.getInt(Constants.PREF_RECIPE_KEY + appWidgetId, Constants.INVALID_RECIPE_ID);
-    }
-
-    static void deleteRecipePref(Context context, int appWidgetId) {
-        SharedPreferences.Editor prefs = context.getSharedPreferences(Constants.PREFS_NAME, 0).edit();
-        prefs.remove(Constants.PREF_RECIPE_KEY + appWidgetId);
-        prefs.apply();
     }
 
     @Override
