@@ -47,14 +47,10 @@ public class StepFragment extends Fragment {
     MediaPlayer mediaPlayer;
     Bundle mediaSaveState;
 
-    public StepFragment() {
-        // Required empty public constructor
-    }
-
     public static StepFragment newInstance(Step step) {
         StepFragment fragment = new StepFragment();
         Bundle args = new Bundle();
-        args.putParcelable(Constants.STEPS_EXTRA, Parcels.wrap(step));
+        args.putParcelable(Constants.STEP_EXTRA, Parcels.wrap(step));
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,7 +84,9 @@ public class StepFragment extends Fragment {
 
         setUpCommonUI(view);
 
-        if(ButterKnife.findById(view, R.id.tv_step_id) != null) {
+        boolean isTabletLayout = getResources().getBoolean(R.bool.tablet_layout);
+
+        if(!isTabletLayout) {
             setUpMobileUI(view);
         }
     }
@@ -104,38 +102,40 @@ public class StepFragment extends Fragment {
     private void setUpCommonUI(View view) {
         ButterKnife.bind(this, view);
 
-        tvDescription.setText(formatText(mStep.getDescription()));
+        if(mStep != null) {
+            tvDescription.setText(formatText(mStep.getDescription()));
 
-        if(!mStep.getVideoURL().isEmpty()) {
-            sepvPlayerView.setVisibility(View.VISIBLE);
-            ivPhoto.setVisibility(View.INVISIBLE);
+            if (!mStep.getVideoURL().isEmpty()) {
+                sepvPlayerView.setVisibility(View.VISIBLE);
+                ivPhoto.setVisibility(View.INVISIBLE);
 
-            mediaPlayer = new MediaPlayer(getContext(), sepvPlayerView, Uri.parse(mStep.getVideoURL()), getLifecycle());
-            if(mediaSaveState != null) {
-                mediaPlayer.restoreSaveBundle(mediaSaveState);
-            }
+                mediaPlayer = new MediaPlayer(getContext(), sepvPlayerView, Uri.parse(mStep.getVideoURL()), getLifecycle());
+                if (mediaSaveState != null) {
+                    mediaPlayer.restoreSaveBundle(mediaSaveState);
+                }
 
-            if(getResources().getConfiguration().orientation == Constants.ORIENTATION_LANDSCAPE) {
+                if (getResources().getConfiguration().orientation == Constants.ORIENTATION_LANDSCAPE) {
 
-                ConstraintLayout layout = ButterKnife.findById(view, R.id.cl_layout_no_video);
-                if(layout != null) layout.setVisibility(View.INVISIBLE);
+                    ConstraintLayout layout = ButterKnife.findById(view, R.id.cl_layout_no_video);
+                    if (layout != null) layout.setVisibility(View.INVISIBLE);
 
-            }
+                }
 
-        } else if(!mStep.getThumbnailURL().isEmpty()) {
-            ivPhoto.setVisibility(View.VISIBLE);
+            } else if (!mStep.getThumbnailURL().isEmpty()) {
+                ivPhoto.setVisibility(View.VISIBLE);
 
-            Picasso.with(getActivity())
-                    .load(mStep.getThumbnailURL())
-                    .fit()
-                    .centerCrop()
-                    .placeholder(R.drawable.recipe_placeholder)
-                    .error(R.drawable.recipe_placeholder)
-                    .into(ivPhoto);
-        } else {
-            FrameLayout mediaLayout = ButterKnife.findById(view, R.id.fl_media_container);
-            if(mediaLayout != null) {
-                mediaLayout.setVisibility(View.GONE);
+                Picasso.with(getActivity())
+                        .load(mStep.getThumbnailURL())
+                        .fit()
+                        .centerCrop()
+                        .placeholder(R.drawable.recipe_placeholder)
+                        .error(R.drawable.recipe_placeholder)
+                        .into(ivPhoto);
+            } else {
+                FrameLayout mediaLayout = ButterKnife.findById(view, R.id.fl_media_container);
+                if (mediaLayout != null) {
+                    mediaLayout.setVisibility(View.GONE);
+                }
             }
         }
     }

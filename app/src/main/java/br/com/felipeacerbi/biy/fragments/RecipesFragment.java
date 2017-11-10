@@ -23,6 +23,7 @@ import br.com.felipeacerbi.biy.app.RecipesApplication;
 import br.com.felipeacerbi.biy.models.Recipe;
 import br.com.felipeacerbi.biy.models.RecipesArrayList;
 import br.com.felipeacerbi.biy.repository.DataManager;
+import br.com.felipeacerbi.biy.utils.IdlingResourceManager;
 import br.com.felipeacerbi.biy.utils.PreferencesUtils;
 import br.com.felipeacerbi.biy.utils.RequestCallback;
 import butterknife.BindView;
@@ -41,6 +42,7 @@ public class RecipesFragment extends Fragment {
     @Inject
     DataManager mDataManager;
 
+    private IdlingResourceManager mIdlingManager;
     private RecipesAdapter mAdapter;
 
     public RecipesFragment() {
@@ -83,11 +85,15 @@ public class RecipesFragment extends Fragment {
     }
 
     private void requestNewRecipes() {
+        mIdlingManager.incrementIdlingResource();
+
         mDataManager.requestRecipes(new RequestCallback<List<Recipe>>() {
             @Override
             public void onSuccess(List<Recipe> recipes) {
                 setUpAdapter(recipes);
                 PreferencesUtils.storeRecipes(getActivity(), recipes);
+
+                mIdlingManager.decrementIdlingResource();
             }
 
             @Override
@@ -115,5 +121,22 @@ public class RecipesFragment extends Fragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof IdlingResourceManager) {
+            mIdlingManager = (IdlingResourceManager) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement IdlingResourceManager");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mIdlingManager = null;
     }
 }

@@ -16,4 +16,6 @@ public class Constants {
     public static final String JSON_PREFERENCE = "json_preference";
     public static final String RECIPE_ID_PREFERENCE = "recipe_id_preference";
 
+    public static final String TEST_RECIPES_IDLING_RESOURCE = "recipes_resource";
+
 }

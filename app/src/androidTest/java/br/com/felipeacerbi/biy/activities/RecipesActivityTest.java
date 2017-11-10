@@ -1,15 +1,19 @@
 package br.com.felipeacerbi.biy.activities;
 
 
+import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import org.hamcrest.Matcher;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,11 +32,19 @@ import static org.hamcrest.Matchers.allOf;
 @RunWith(AndroidJUnit4.class)
 public class RecipesActivityTest {
 
+    private CountingIdlingResource mIdlingResource;
+
     @Rule
     public ActivityTestRule<RecipesActivity> mActivityTestRule = new ActivityTestRule<>(RecipesActivity.class);
 
+    @Before
+    public void registerIdlingResource() {
+        mIdlingResource = mActivityTestRule.getActivity().getIdlingResource();
+        IdlingRegistry.getInstance().register(mIdlingResource);
+    }
+
     @Test
-    public void recipeStepsTest() {
+    public void recipeMobileStepsTest() {
 
         onView(withId(R.id.recipes_list_fragment)).check(matches(isDisplayed()));
         onView(withId(R.id.recipes_list_fragment)).perform(RecyclerViewActions.scrollToPosition(0));
@@ -60,6 +72,13 @@ public class RecipesActivityTest {
                 RecyclerViewActions.actionOnItemAtPosition(0, clickChildViewWithId(R.id.btn_show_ingredients)));
 
         onView(withId(R.id.rv_ingredients_list)).check(matches(isDisplayed()));
+    }
+
+    @After
+    public void unregisterIdlingResource() {
+        if (mIdlingResource != null) {
+            IdlingRegistry.getInstance().unregister(mIdlingResource);
+        }
     }
 
     public static ViewAction clickChildViewWithId(final int id) {
